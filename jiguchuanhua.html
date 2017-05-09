@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>击鼓传花</title>
+</head>
+
+<body>
+参与人员：<input type="text" name="people" value="a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z" disabled>
+击鼓次数：<input type="number" name="number" value="0">
+<input type="button" name="start" value="开始">
+<script>
+	window.onload = function() {
+		var button = document.getElementsByName("start")[0];
+
+		if (button.addEventListener) {
+			button.addEventListener('click',gameStart);
+		} else if (button.attachEvent) {
+			button.attachEvent('onclick',gameStart);
+		};
+
+		function gameStart() {
+			var peoples=document.getElementsByName("people")[0].value,
+				number=document.getElementsByName("number")[0].value,
+				peopleArr=[];
+			
+			peopleArr = peoples.split(",");
+
+			if (number > 0) {
+				if (Math.floor(number) == number) {
+					for (var i = 1; i < number; i++) {
+						peopleArr.push(peopleArr.shift());
+					};
+					var eliminated = peopleArr.shift();
+					alert(eliminated+"被淘汰！");
+				}else{
+					alert("击鼓次数请输入整数！");
+				};
+			}else{
+				alert("击鼓次数请输入正整数！");
+			};
+			
+			document.getElementsByName("people")[0].value = peopleArr.toString();
+			if (peopleArr.length == 1) {
+				alert(peopleArr[0]+"胜出，游戏结束！");
+				button.disabled = true;
+			};
+		};
+	};
+</script>
+</body>
+</html>
