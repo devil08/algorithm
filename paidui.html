@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>排队算法</title>
+</head>
+
+<body>
+用户姓名：<input type="text" name="username"><br />
+用户等级：<label><input type="radio" name="grade" value="1" checked> 普通用户</label>
+<label><input type="radio" name="grade" value="2"> 付费用户</label>
+<label><input type="radio" name="grade" value="3"> VIP用户</label>
+<input type="button" value="排队">（用户等级越高排位越靠前）<br />
+<div>队列：</div>
+<script>
+	window.onload = function() {
+		var queue = [],
+			queueUser = [],
+			element = document.getElementsByTagName("input"),
+			button = element[element.length-1],
+			UserObj = function(userName,userGrade) {
+				this.userName = userName;
+				this.userGrade = userGrade;
+			};
+
+		//监听按钮点击事件
+		if (button.addEventListener) {
+			button.addEventListener('click',lineUp);
+		} else if (button.attachEvent) {
+			button.attachEvent('onclick',lineUp);
+		};
+
+		function lineUp() {
+			var userName = document.getElementsByName("username")[0].value,
+				userGrades = document.getElementsByName("grade"),
+				gueueDiv = document.getElementsByTagName("div")[0];
+				userGrade = 0;
+
+			//用户姓名清空
+			document.getElementsByName("username")[0].value = "";
+
+			for (var i=0; i<userGrades.length; i++) {
+				if (userGrades[i].checked) {
+					userGrade = userGrades[i].value;
+					//用户等级选项恢复默认值
+					userGrades[i].checked = false;
+					userGrades[0].checked = true;
+					break;
+				};
+			};
+
+			if (!userName) {
+				alert("请输入用户名！");
+				return false;
+			};
+
+			var tempObj = new UserObj(userName,userGrade);
+
+			if (!queue.length) {
+				//队列数组为空直接插入新用户
+				queue.push(tempObj);
+				queueUser.push(tempObj.userName);
+			}else{
+				var added = false;
+				for (var i=0; i<queue.length; i++) {
+					if (queue[i].userGrade < tempObj.userGrade) {
+						//新增用户等级高于此用户等级直接在此用户前插入新用户
+						queue.splice(i,0,tempObj);
+						queueUser.splice(i,0,tempObj.userName);
+						added = true;
+						break;
+					};
+				};
+				if (!added) {
+					//新增用户等级不高于其他用户等级在队列数组最后插入
+					queue.push(tempObj);
+					queueUser.push(tempObj.userName);
+				};
+			};
+
+			gueueDiv.innerText = "队列："+queueUser.toString();
+		};
+	};
+</script>
+</body>
+</html>
