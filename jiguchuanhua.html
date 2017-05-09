@@ -13,6 +13,7 @@
 	window.onload = function() {
 		var button = document.getElementsByName("start")[0];
 
+		//监听按钮点击事件
 		if (button.addEventListener) {
 			button.addEventListener('click',gameStart);
 		} else if (button.attachEvent) {
@@ -29,6 +30,7 @@
 			if (number > 0) {
 				if (Math.floor(number) == number) {
 					for (var i = 1; i < number; i++) {
+						//将队列最前的参与人员移到队列最后
 						peopleArr.push(peopleArr.shift());
 					};
 					var eliminated = peopleArr.shift();
