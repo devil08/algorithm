@@ -6,6 +6,52 @@
 </head>
 
 <body>
+需要转换数字：<input type="text" name="decNumber" value="">
+转换进制：
+<select name="base">
+	<option value="2">二进制</option>
+	<option value="8">八进制</option>
+	<option value="16">十六进制</option>
+</select>
+<input type="button" name="start" value="转换">
+<div id="result"></div>
+<script>
+	window.onload = function() {
+		var button = document.getElementsByName("start")[0];
 
+		if (button.addEventListener) {
+			button.addEventListener('click',baseConverter);
+		} else if (button.attachEvent) {
+			button.attachEvent('onclick',baseConverter);
+		};
+
+		function baseConverter() {
+			var decNumber = document.getElementsByName("decNumber")[0].value,
+				base = document.getElementsByName("base")[0].value,
+				result = document.getElementById("result"),
+				remStack = [],
+				rem,
+				baseString = "",
+				digits = "0123456789ABCDEF";
+
+			if (Math.floor(decNumber) == decNumber) {
+				while (decNumber > 0) {
+					rem = Math.floor(decNumber % base);
+					remStack.push(rem);
+					decNumber = Math.floor(decNumber / base);
+				};
+
+				while (remStack.length > 0) {
+					baseString += digits[remStack.pop()];
+				};
+
+				result.innerHTML = baseString;
+			} else {
+				alert("需要转换数字请输入正整数！");
+				return false;
+			};
+		};
+	};
+</script>
 </body>
 </html>
